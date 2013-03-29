@@ -99,8 +99,31 @@ fi
 
 echo 
 
-if [[ $? != 0 ]]; then
-	error 'Could not complete installation'
+CURRENT_BASIL_PATH=$(which basil)
+TARGET_BASIL_PATH="$BASIL_ROOT/bin/basil"
+SYSTEM_WIDE_INSTALL=false
+
+read -p "Would you like to link basil to /usr/local/ (Will not work for other users)? [Y/N]" -n 1 -r
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	echo 'Trying to execute link basil to /usr/local with sudo'
+
+	if [[ -e /usr/local/bin/basil ]]; then
+		sudo sh -c "unlink /usr/local/bin/basil; ln -s '$TARGET_BASIL_PATH' /usr/local/bin/basil"
+	else
+		sudo ln -s "$TARGET_BASIL_PATH" /usr/local/bin/basil
+	fi
+
+	if [[ $? != 0 ]]; then
+		error "Could not link basil to /usr/local"
+		SYSTEM_WIDE_INSTALL=false
+	fi
+fi
+
+
+if [[ $SYSTEM_WIDE_INSTALL == true ]]; then
+	echo "Successfully installed. Type $BASIL_ROOT/bin/basil to begin."
+	echo "You may wish to add $BASIL_ROOT/bin to your \$PATH"
 else
 	echo 'Successfully installed. Type "basil" to begin.'
 fi
