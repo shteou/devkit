@@ -62,13 +62,6 @@ fi
 # Install
 #
 
-BASIL_PATH=$(which basil)
-
-if [[ -L "$BASIL_PATH" ]]  ; then
-		echo "Removing old basil symlink."
-		rm "$BASIL_PATH"
-fi
-
 echo -e "\nInitializing GC SDK libraries ..."
 
 # setup for gc internal repositories
