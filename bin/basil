@@ -4,7 +4,11 @@
 
 # concat some paths to find the current dir
 PARTONE=$(dirname $0)
-PARTTWO=$(dirname $(readlink $0))"/../"
+if [[ -L $0 ]]; then
+	PARTTWO=$(dirname $(readlink $0))"/../"
+else
+	PARTTWO=$(dirname $0)"/../"
+fi
 
 if [ -z $BASIL_DEBUG ]; then
 	BASIL_DEBUG=1
